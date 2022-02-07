@@ -1,7 +1,0 @@
-main: de.timesnake.database.bukkit.main.DatabaseBukkit
-version: 1.0
-name: database-bukkit
-author: Mn
-api-version: 1.13
-depend: [ channel-bukkit ]
-softdepend: [ basic-bukkit ]
