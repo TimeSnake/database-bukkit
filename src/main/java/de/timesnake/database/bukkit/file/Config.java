@@ -116,12 +116,12 @@ public class Config implements DatabaseConfig {
     }
 
     @Override
-    public String getDatabaseTable(String databaseType, String tableType) throws DatabaseNotConfiguredException {
+    public String getDatabaseTable(String databaseType, String tableType, String defaultName) throws DatabaseNotConfiguredException {
         String tableName = proxyConfig.getString("database." + databaseType + ".tables." + tableType);
         if (tableName != null) {
             return tableName;
         }
-        throw new DatabaseNotConfiguredException(databaseType, tableType);
+        return defaultName;
     }
 
 }
