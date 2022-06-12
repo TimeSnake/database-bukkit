@@ -17,6 +17,18 @@ public class Config implements DatabaseConfig {
     private File proxyFile;
     private YamlConfiguration proxyConfig;
 
+    private static void error() {
+        System.out.println("[Database] ######################################");
+        System.out.println("[Database] #                                    #");
+        System.out.println("[Database] #     Error while loading config     #");
+        System.out.println("[Database] #  Please set the proxy-config-path  #");
+        System.out.println("[Database] #      The server restarts now       #");
+        System.out.println("[Database] #                                    #");
+        System.out.println("[Database] ######################################");
+        Bukkit.shutdown();
+
+    }
+
     public void onEnable() {
 
         //ConfigFile
@@ -54,18 +66,6 @@ public class Config implements DatabaseConfig {
                 } else Config.error();
             } else Config.error();
         } else Config.error();
-    }
-
-    private static void error() {
-        System.out.println("[Database] ######################################");
-        System.out.println("[Database] #                                    #");
-        System.out.println("[Database] #     Error while loading config     #");
-        System.out.println("[Database] #  Please set the proxy-config-path  #");
-        System.out.println("[Database] #      The server restarts now       #");
-        System.out.println("[Database] #                                    #");
-        System.out.println("[Database] ######################################");
-        Bukkit.shutdown();
-
     }
 
     public void load() {
@@ -113,15 +113,6 @@ public class Config implements DatabaseConfig {
             return url;
         }
         throw new DatabaseNotConfiguredException(databaseType, "url");
-    }
-
-    @Override
-    public String getDatabaseTable(String databaseType, String tableType, String defaultName) throws DatabaseNotConfiguredException {
-        String tableName = proxyConfig.getString("database." + databaseType + ".tables." + tableType);
-        if (tableName != null) {
-            return tableName;
-        }
-        return defaultName;
     }
 
 }
