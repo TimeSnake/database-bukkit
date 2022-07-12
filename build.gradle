@@ -20,10 +20,12 @@ repositories {
     maven {
         url = uri('https://repo.maven.apache.org/maven2/')
     }
+    mavenCentral()
 }
 
 dependencies {
     implementation 'de.timesnake:database-api:1.0-SNAPSHOT-all'
+    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
     compileOnly 'io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT'
 }
 

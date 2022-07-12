@@ -1,5 +1,6 @@
 package de.timesnake.database.bukkit.file;
 
+import com.moandjiezana.toml.Toml;
 import de.timesnake.database.core.file.DatabaseConfig;
 import de.timesnake.database.core.file.DatabaseNotConfiguredException;
 import org.bukkit.Bukkit;
@@ -10,12 +11,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class Config implements DatabaseConfig {
-
-    private final File configFile = new File("plugins/database/config.yml");
-    private final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-
-    private File proxyFile;
-    private YamlConfiguration proxyConfig;
 
     private static void error() {
         System.out.println("[Database] ######################################");
@@ -28,6 +23,11 @@ public class Config implements DatabaseConfig {
         Bukkit.shutdown();
 
     }
+
+    private final File configFile = new File("plugins/database/config.yml");
+    private final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+    protected File proxyConfigFile;
+    protected Toml proxyConfig;
 
     public void onEnable() {
 
@@ -47,49 +47,20 @@ public class Config implements DatabaseConfig {
             }
 
 
-            this.load();
-
-            config.set("proxy.path", "nopath");
-
-            this.save();
-            this.load();
-
-
+            try {
+                config.load(configFile);
+            } catch (IOException | InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
         }
 
         String proxyPath = config.getString("proxy.path");
         if (proxyPath != null) {
-            if (!proxyPath.equalsIgnoreCase("nopath")) {
-                proxyFile = new File(proxyPath + "/plugins/database/config.yml");
-                if (proxyFile != null && proxyFile.exists()) {
-                    proxyConfig = YamlConfiguration.loadConfiguration(proxyFile);
-                } else Config.error();
+            proxyConfigFile = new File(proxyPath + "/plugins/database/config.toml");
+            if (proxyConfigFile != null && proxyConfigFile.exists()) {
+                proxyConfig = new Toml().read(proxyConfigFile);
             } else Config.error();
         } else Config.error();
-    }
-
-    public void load() {
-        try {
-            config.load(configFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void save() {
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void loadProxy() {
-        try {
-            proxyConfig.load(proxyFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
