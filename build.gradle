@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'de.timesnake:database-api:1.0-SNAPSHOT-all'
+    implementation project(':database-api')
 
     compileOnly project.toml
 
