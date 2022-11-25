@@ -21,7 +21,7 @@ dependencies {
 }
 
 group = project.group
-version = '1.0-SNAPSHOT'
+version = project(":database-api").version
 archivesBaseName = 'database-bukkit'
 
 task buildFatJar(type: Jar) {
