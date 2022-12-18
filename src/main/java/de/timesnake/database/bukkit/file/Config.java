@@ -1,5 +1,5 @@
 /*
- * database-bukkit.main
+ * workspace.database-bukkit.main
  * Copyright (C) 2022 timesnake
  *
  * This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@ package de.timesnake.database.bukkit.file;
 import com.moandjiezana.toml.Toml;
 import de.timesnake.database.core.file.DatabaseConfig;
 import de.timesnake.database.core.file.DatabaseNotConfiguredException;
+import de.timesnake.database.util.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,13 +32,13 @@ import java.io.IOException;
 public class Config implements DatabaseConfig {
 
     private static void error() {
-        System.out.println("[Database] ######################################");
-        System.out.println("[Database] #                                    #");
-        System.out.println("[Database] #     Error while loading config     #");
-        System.out.println("[Database] #  Please set the proxy-config-path  #");
-        System.out.println("[Database] #      The server restarts now       #");
-        System.out.println("[Database] #                                    #");
-        System.out.println("[Database] ######################################");
+        Database.LOGGER.warning("[Database] ######################################");
+        Database.LOGGER.warning("[Database] #                                    #");
+        Database.LOGGER.warning("[Database] #     Error while loading config     #");
+        Database.LOGGER.warning("[Database] #  Please set the proxy-config-path  #");
+        Database.LOGGER.warning("[Database] #      The server restarts now       #");
+        Database.LOGGER.warning("[Database] #                                    #");
+        Database.LOGGER.warning("[Database] ######################################");
         Bukkit.shutdown();
 
     }
