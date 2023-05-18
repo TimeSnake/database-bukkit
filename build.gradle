@@ -1,5 +1,11 @@
+group = project.group
+version = project(":database-api").version
+archivesBaseName = 'database-bukkit'
+var projectId = 44
+
 repositories {
   mavenLocal()
+  mavenCentral()
   maven {
     url = uri 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
   }
@@ -19,10 +25,6 @@ dependencies {
 
   compileOnly project.paper_api
 }
-
-group = project.group
-version = project(":database-api").version
-archivesBaseName = 'database-bukkit'
 
 task buildFatJar(type: Jar) {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -51,3 +53,24 @@ jar.finalizedBy(buildFatJar)
 copyJarToPlugins.dependsOn(buildFatJar)
 copyJarToPlugins.dependsOn(deleteOldPluginJar)
 jar.finalizedBy(copyJarToPlugins)
+
+publishing {
+  publications {
+    mavenJavaAll(MavenPublication) {
+      version version + '-all'
+      artifact {
+        file "build/libs/" + archivesBaseName + "-" + version + ".jar"
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      url getDeployUrl(projectId)
+      credentials {
+        username = deploy_token_name
+        password = deploy_token_key
+      }
+    }
+  }
+}
