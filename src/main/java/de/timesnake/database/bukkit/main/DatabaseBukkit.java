@@ -14,18 +14,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class DatabaseBukkit extends JavaPlugin {
 
-    public static void disconnect() {
-        Database.getInstance().close();
-    }
+  public static void disconnect() {
+    Database.getInstance().close();
+  }
 
-    @Override
-    public void onEnable() {
-        Config config = new Config();
-        config.onEnable();
-        try {
-            Database.getInstance().connect(config);
-        } catch (DatabaseNotConfiguredException e) {
-            Bukkit.getLogger().log(Level.INFO, e.getMessage());
-        }
+  @Override
+  public void onEnable() {
+    Config config = new Config();
+    config.onEnable();
+    try {
+      Database.getInstance().connect(config);
+    } catch (DatabaseNotConfiguredException e) {
+      Bukkit.getLogger().log(Level.INFO, e.getMessage());
     }
+  }
 }
