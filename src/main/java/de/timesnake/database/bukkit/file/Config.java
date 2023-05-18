@@ -5,15 +5,14 @@
 package de.timesnake.database.bukkit.file;
 
 import com.moandjiezana.toml.Toml;
-import de.timesnake.database.core.file.DatabaseConfig;
-import de.timesnake.database.core.file.DatabaseNotConfiguredException;
+import de.timesnake.database.core.DatabaseConfig;
+import de.timesnake.database.core.DatabaseNotConfiguredException;
 import de.timesnake.database.util.Database;
+import java.io.File;
+import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.io.File;
-import java.io.IOException;
 
 public class Config implements DatabaseConfig {
 
@@ -42,7 +41,6 @@ public class Config implements DatabaseConfig {
             dir.mkdir();
         }
 
-
         if (!configFile.exists()) {
             try {
                 configFile.createNewFile();
@@ -50,7 +48,6 @@ public class Config implements DatabaseConfig {
                 e.printStackTrace();
                 return;
             }
-
 
             try {
                 config.load(configFile);
@@ -64,8 +61,12 @@ public class Config implements DatabaseConfig {
             proxyConfigFile = new File(proxyPath + "/plugins/database/config.toml");
             if (proxyConfigFile != null && proxyConfigFile.exists()) {
                 proxyConfig = new Toml().read(proxyConfigFile);
-            } else Config.error();
-        } else Config.error();
+            } else {
+                Config.error();
+            }
+        } else {
+            Config.error();
+        }
     }
 
     @Override
