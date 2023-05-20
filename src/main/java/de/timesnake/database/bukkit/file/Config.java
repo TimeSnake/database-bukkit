@@ -83,13 +83,4 @@ public class Config implements DatabaseConfig {
     throw new DatabaseNotConfiguredException(databaseType, "name");
   }
 
-  @Override
-  public String getDatabaseUrl(String databaseType) throws DatabaseNotConfiguredException {
-    String url = proxyConfig.getString("database." + databaseType + ".url");
-    if (url != null) {
-      return url;
-    }
-    throw new DatabaseNotConfiguredException(databaseType, "url");
-  }
-
 }
