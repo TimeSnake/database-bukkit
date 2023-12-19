@@ -39,7 +39,9 @@ dependencies {
 
 configurations.configureEach {
   resolutionStrategy.dependencySubstitution {
-    substitute module("de.timesnake:database-api") using project(":database-api")
+    if (project.parent != null) {
+      substitute module("de.timesnake:database-api") using project(":database-api")
+    }
   }
 }
 
