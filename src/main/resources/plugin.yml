@@ -1,5 +1,5 @@
 main: de.timesnake.database.bukkit.main.DatabaseBukkit
-version: 1.0
+version: 2.2.1
 name: database-bukkit
 author: Mn
 api-version: 1.13
