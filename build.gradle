@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-  implementation "de.timesnake:database-api:2.2.1"
+  implementation "de.timesnake:database-api:2.2.2"
 
   compileOnly "com.moandjiezana.toml:toml4j:0.7.3-SNAPSHOT"
 
