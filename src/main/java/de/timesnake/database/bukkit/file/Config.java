@@ -8,22 +8,23 @@ import com.moandjiezana.toml.Toml;
 import de.timesnake.database.core.DatabaseConfig;
 import de.timesnake.database.core.DatabaseNotConfiguredException;
 import de.timesnake.database.util.Database;
-import java.io.File;
-import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
+import java.io.IOException;
+
 public class Config implements DatabaseConfig {
 
   private static void error() {
-    Database.LOGGER.warning("[Database] ######################################");
-    Database.LOGGER.warning("[Database] #                                    #");
-    Database.LOGGER.warning("[Database] #     Error while loading config     #");
-    Database.LOGGER.warning("[Database] #  Please set the proxy-config-path  #");
-    Database.LOGGER.warning("[Database] #      The server restarts now       #");
-    Database.LOGGER.warning("[Database] #                                    #");
-    Database.LOGGER.warning("[Database] ######################################");
+    Database.LOGGER.warn("[Database] ######################################");
+    Database.LOGGER.warn("[Database] #                                    #");
+    Database.LOGGER.warn("[Database] #     Error while loading config     #");
+    Database.LOGGER.warn("[Database] #  Please set the proxy-config-path  #");
+    Database.LOGGER.warn("[Database] #      The server restarts now       #");
+    Database.LOGGER.warn("[Database] #                                    #");
+    Database.LOGGER.warn("[Database] ######################################");
     Bukkit.shutdown();
 
   }
