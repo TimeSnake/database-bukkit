@@ -1,3 +1,5 @@
+import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
+
 plugins {
   id 'java'
   id 'java-base'
@@ -10,7 +12,7 @@ plugins {
 
 
 group = "de.timesnake"
-version = '2.7.0'
+version = '3.0.0'
 var projectId = 44
 
 repositories {
@@ -30,7 +32,7 @@ repositories {
 }
 
 dependencies {
-  implementation "de.timesnake:database-api:2.+"
+  implementation "de.timesnake:database-api:3.+"
 
   compileOnly "com.moandjiezana.toml:toml4j:0.7.3-SNAPSHOT"
 
@@ -44,8 +46,6 @@ configurations.configureEach {
     }
   }
 }
-
-
 
 tasks.register('exportAsPlugin', Copy) {
   from "$buildDir/libs/${archivesBaseName}-${project.version}.jar"
@@ -71,18 +71,22 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
       from components.java
-
-      artifact "$buildDir/libs/${archivesBaseName}-${project.version}.jar"
     }
   }
 }
 
-tasks.withType(JavaCompile).configureEach {
-  options.encoding = 'UTF-8'
+tasks {
+  compileJava {
+    options.encoding = "UTF-8"
+    options.release = 21
+  }
 }
 
 java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
   withSourcesJar()
 }
 
-paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.getMOJANG_PRODUCTION()
+paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.getMOJANG_PRODUCTION()
