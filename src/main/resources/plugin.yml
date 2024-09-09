@@ -2,5 +2,5 @@ main: de.timesnake.database.bukkit.main.DatabaseBukkit
 version: 2.7.0
 name: database-bukkit
 author: timesnake
-api-version: 1.13
+api-version: 1.21
 softdepend: [ channel-bukkit ]
