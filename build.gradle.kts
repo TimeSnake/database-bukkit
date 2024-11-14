@@ -52,7 +52,7 @@ tasks.register<Copy>("exportAsPlugin") {
 }
 
 tasks.withType<PublishToMavenRepository> {
-    finalizedBy("shadowJar")
+    dependsOn("shadowJar")
 }
 
 publishing {
