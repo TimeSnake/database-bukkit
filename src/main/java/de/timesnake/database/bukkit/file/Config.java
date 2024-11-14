@@ -6,7 +6,6 @@ package de.timesnake.database.bukkit.file;
 
 import com.moandjiezana.toml.Toml;
 import de.timesnake.database.core.DatabaseConfig;
-import de.timesnake.database.core.DatabaseNotConfiguredException;
 import de.timesnake.database.util.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -60,7 +59,7 @@ public class Config implements DatabaseConfig {
     String proxyPath = config.getString("proxy.path");
     if (proxyPath != null) {
       proxyConfigFile = new File(proxyPath + "/plugins/database/config.toml");
-      if (proxyConfigFile != null && proxyConfigFile.exists()) {
+      if (proxyConfigFile.exists()) {
         proxyConfig = new Toml().read(proxyConfigFile);
       } else {
         Config.error();
@@ -73,15 +72,6 @@ public class Config implements DatabaseConfig {
   @Override
   public String getString(String path) {
     return proxyConfig.getString(path);
-  }
-
-  @Override
-  public String getDatabaseName(String databaseType) throws DatabaseNotConfiguredException {
-    String name = proxyConfig.getString("database." + databaseType + ".name");
-    if (name != null) {
-      return name;
-    }
-    throw new DatabaseNotConfiguredException(databaseType, "name");
   }
 
 }
