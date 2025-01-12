@@ -12,7 +12,7 @@ plugins {
 
 
 group = "de.timesnake"
-version = "3.1.0"
+version = "4.0.0"
 var projectId = 44
 
 repositories {
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation("de.timesnake:database-api:3.+")
+    implementation("de.timesnake:database-api:4.+")
 
     compileOnly("com.moandjiezana.toml:toml4j:0.7.3-SNAPSHOT")
 
