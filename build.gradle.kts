@@ -12,7 +12,7 @@ plugins {
 
 
 group = "de.timesnake"
-version = "4.1.0"
+version = "5.0.0"
 var projectId = 44
 
 repositories {
@@ -28,31 +28,37 @@ repositories {
     }
 }
 
-dependencies {
-    implementation("de.timesnake:database-api:4.+")
+val pluginImplementation: Configuration by configurations.creating
+val pluginFile = layout.buildDirectory.file("libs/${project.name}-${project.version}-plugin.jar")
+val pluginArtifact = artifacts.add("pluginImplementation", pluginFile.get().asFile) {
+    builtBy("pluginJar")
+}
 
-    compileOnly("com.moandjiezana.toml:toml4j:0.7.3-SNAPSHOT")
+dependencies {
+    pluginImplementation("de.timesnake:database-api:5.+") {
+        isTransitive = false
+    }
+    pluginImplementation("org.apache.commons:commons-dbcp2:2.9+")
+    pluginImplementation("org.mariadb.jdbc:mariadb-java-client:3.0.6")
+
+    api("de.timesnake:database-api:5.+")
+
+    implementation("com.moandjiezana.toml:toml4j:0.7.3-SNAPSHOT")
 
     paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
 }
 
-configurations.configureEach {
-    resolutionStrategy.dependencySubstitution {
-        if (project.parent != null) {
-            substitute(module("de.timesnake:database-api")).using(project(":database:database-api"))
+configurations.all {
+    resolutionStrategy.dependencySubstitution.all {
+        requested.let {
+            if (it is ModuleComponentSelector && it.group == "de.timesnake") {
+                val targetProject = findProject(":${it.module}")
+                if (targetProject != null) {
+                    useTarget(targetProject)
+                }
+            }
         }
     }
-}
-
-tasks.register<Copy>("exportAsPlugin") {
-    from(layout.buildDirectory.file("libs/${project.name}-${project.version}-all.jar"))
-    into(findProperty("timesnakePluginDir") ?: "")
-
-    dependsOn("shadowJar")
-}
-
-tasks.withType<PublishToMavenRepository> {
-    dependsOn("shadowJar")
 }
 
 publishing {
@@ -68,7 +74,35 @@ publishing {
         create<MavenPublication>("maven") {
             from(components["java"])
         }
+        create<MavenPublication>("plugin") {
+            artifact(pluginArtifact)
+        }
     }
+}
+
+tasks.register<Jar>("pluginJar") {
+    from(pluginImplementation.map { if (it.isDirectory) it else zipTree(it) })
+    with(tasks.jar.get() as CopySpec)
+    archiveClassifier = "plugin"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn("shadowJar", "assemble")
+}
+
+tasks.register<Copy>("exportPluginJar") {
+    from(pluginFile)
+    into(findProperty("timesnakePluginDir") ?: "")
+    dependsOn("pluginJar")
+}
+
+tasks.withType<PublishToMavenRepository> {
+    dependsOn("pluginJar")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withSourcesJar()
 }
 
 tasks {
@@ -84,13 +118,6 @@ tasks {
             expand(mapOf(Pair("version", project.version)))
         }
     }
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-    withSourcesJar()
 }
 
 paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.MOJANG_PRODUCTION
